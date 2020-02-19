@@ -1,16 +1,20 @@
 <template>
-  <canvas resize ref="canvas"></canvas>
+  <div>
+    <div class="v-ui">
+      <VHeader></VHeader>
+    </div>
+  </div>
 </template>
 
 <script>
+import VHeader from "@/components/VHeader";
+import paper from "paper";
 export default {
-  mounted() {
-    this.$paper.setup(this.canvas);
+  components: {
+    VHeader
   },
-  computed: {
-    canvas() {
-      return this.$refs.canvas;
-    }
+  created() {
+    paper.setup(document.getElementById("canvas"));
   }
 };
 </script>
@@ -24,5 +28,10 @@ body {
 canvas {
   width: 100%;
   height: 100vh;
+}
+.v-ui {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 </style>
