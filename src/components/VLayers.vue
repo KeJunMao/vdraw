@@ -32,7 +32,8 @@ import VIconBtn from "@/components/VIconBtn";
 import VLayerItem from "@/components/VLayerItem";
 import draggable from "vuedraggable";
 import paper from "paper";
-
+import history from "@/utils/history";
+import { LayerAction } from "@/utils/actions";
 export default {
   components: {
     VIconBtn,
@@ -48,6 +49,13 @@ export default {
   methods: {
     addLayer() {
       const layer = new paper.Layer();
+      history.add(
+        new LayerAction({
+          project: paper.project,
+          type: "add",
+          layer
+        })
+      );
       layer.activate();
     },
     activate(layer) {
@@ -57,6 +65,13 @@ export default {
       layer.visible = !layer.visible;
     },
     remove(layer) {
+      history.add(
+        new LayerAction({
+          project: paper.project,
+          type: "remove",
+          layer
+        })
+      );
       layer.remove();
     }
   }
