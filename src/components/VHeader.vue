@@ -1,15 +1,18 @@
 <template>
   <div class="v-header">
+    <VTools></VTools>
+    |
     <VLayers></VLayers>
   </div>
 </template>
 
 <script>
 import VLayers from "@/components/VLayers";
-
+import VTools from "@/components/VTools";
 export default {
   components: {
-    VLayers
+    VLayers,
+    VTools
   }
 };
 </script>

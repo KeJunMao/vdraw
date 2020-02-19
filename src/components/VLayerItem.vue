@@ -19,7 +19,7 @@
         :disabled="paper.project.layers.length <= 1"
         title="删除"
         :class="!active ? 'v-layer-item-button--hidden' : ''"
-        >remove_circle</VIconBtn
+        >delete</VIconBtn
       >
     </div>
     <div class="v-layer-item-bg">

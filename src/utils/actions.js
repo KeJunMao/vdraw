@@ -1,6 +1,6 @@
 export class DrawAction {
-  constructor({ path, layer }) {
-    this._args = { path, layer };
+  constructor({ path }) {
+    this._args = { path };
   }
   exec() {
     if (this.removed) {

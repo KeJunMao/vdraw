@@ -15,6 +15,7 @@ export default {
   },
   created() {
     paper.setup(document.getElementById("canvas"));
+    paper.tool = null;
   }
 };
 </script>
