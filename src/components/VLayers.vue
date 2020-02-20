@@ -1,7 +1,7 @@
 <template>
   <div class="v-layers">
     <v-popover offset="16">
-      <VIconBtn>layers</VIconBtn>
+      <VIconBtn title="图层">layers</VIconBtn>
       <template slot="popover">
         <div class="v-layers-box">
           <div class="v-layers-header">

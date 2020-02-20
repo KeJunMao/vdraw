@@ -41,7 +41,9 @@ export default {
   },
   computed: {
     cursor() {
-      if (this.$store.state.toolName) return `cursor: none;`;
+      const tool = this.$store.state.toolName;
+      if (tool === null) return `cursor: auto;`;
+      if (tool !== "select") return `cursor: none;`;
       return `cursor: auto;`;
     },
     canvas() {
