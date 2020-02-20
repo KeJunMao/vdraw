@@ -1,15 +1,17 @@
 import paper from "paper";
 import history from "@/utils/history";
 import { DrawAction } from "@/utils/actions";
-
+import store from "@/store";
 const local = {
   path: null
 };
 
 const onMouseDown = event => {
   local.path = new paper.Path();
-  local.path.strokeColor = "black";
-  local.path.strokeWidth = "5";
+  local.path.strokeColor = store.state.pencilArgs.color;
+  local.path.strokeWidth = store.state.pencilArgs.size;
+  local.path.strokeCap = "round";
+  local.path.strokeJoin = "round";
   local.path.add(event.point);
 };
 
@@ -20,6 +22,7 @@ const onMouseDrag = event => {
 
 const onMouseUp = event => {
   local.path.add(event.point);
+  local.path.simplify();
   history.add(
     new DrawAction({
       path: local.path

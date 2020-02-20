@@ -1,6 +1,6 @@
 <template>
   <div @click="handleClick" class="v-icon-btn" :class="iconClass">
-    <i :style="fontSize" class="material-icons">
+    <i :style="fontSize + fontColor" class="material-icons">
       <slot></slot>
     </i>
   </div>
@@ -14,6 +14,10 @@ export default {
     size: {
       default: 20,
       type: Number
+    },
+    color: {
+      type: [Object, String],
+      default: "black"
     }
   },
   computed: {
@@ -27,6 +31,13 @@ export default {
     },
     fontSize() {
       return `font-size:${this.size}px;`;
+    },
+    fontColor() {
+      if (this.disabled) {
+        return "";
+      }
+      const color = this.color.hex || this.color;
+      return `color: ${color};`;
     }
   },
   methods: {

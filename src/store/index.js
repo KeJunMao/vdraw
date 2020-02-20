@@ -5,7 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    toolName: null
+    toolName: null,
+    pencilArgs: {
+      color: "#000000",
+      size: 10
+    }
   },
   mutations: {
     setTool(state, toolName) {
@@ -13,6 +17,11 @@ export default new Vuex.Store({
       if (tools[toolName]) {
         tools[toolName].activate();
       }
+    },
+    setArgs(state, { toolName, color, size }) {
+      const tool = state[toolName + "Args"];
+      tool.color = color || tool.color;
+      tool.size = size || tool.size;
     }
   },
   actions: {},
