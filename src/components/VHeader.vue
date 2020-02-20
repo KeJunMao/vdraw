@@ -4,6 +4,13 @@
     <div class="v-header-line">|</div>
     <VTools></VTools>
     <div class="v-header-line">|</div>
+    <VIconBtn :disabled="!history.canUndo()" title="撤销" @click="undo"
+      >undo</VIconBtn
+    >
+    <VIconBtn :disabled="!history.canRedo()" title="重做" @click="redo"
+      >redo</VIconBtn
+    >
+    <div class="v-header-line">|</div>
     <VLayers></VLayers>
     <div class="v-header-line">|</div>
     <VIconBtn title="保存" @click="exportSvg">save</VIconBtn>
@@ -17,12 +24,18 @@ import VTools from "@/components/VTools";
 import VPicker from "@/components/VPicker";
 import VIconBtn from "@/components/VIconBtn";
 import paper from "paper";
+import history from "@/utils/history";
 export default {
   components: {
     VLayers,
     VTools,
     VIconBtn,
     VPicker
+  },
+  data() {
+    return {
+      history
+    };
   },
   methods: {
     exportSvg(fileName) {
@@ -41,6 +54,13 @@ export default {
     },
     clear() {
       paper.project.clear();
+      history.clear();
+    },
+    undo() {
+      history.undo();
+    },
+    redo() {
+      history.redo();
     }
   }
 };
