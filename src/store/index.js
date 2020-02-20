@@ -9,13 +9,22 @@ export default new Vuex.Store({
     pencilArgs: {
       color: "#000000",
       size: 10
+    },
+    eraserArgs: {
+      size: 20
     }
   },
   mutations: {
     setTool(state, toolName) {
+      if (state.toolName && tools[state.toolName].onToggleOut) {
+        tools[state.toolName].onToggleOut();
+      }
       state.toolName = toolName;
       if (tools[toolName]) {
         tools[toolName].activate();
+        if (tools[toolName].onToggleIn) {
+          tools[toolName].onToggleIn();
+        }
       }
     },
     setArgs(state, { toolName, color, size }) {

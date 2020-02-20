@@ -49,12 +49,14 @@ export default {
       return this.$store.state[this.toolName + "Args"] || {};
     },
     previewDotStyle() {
-      return `width: ${this.size}px;height: ${
-        this.size
-      }px;background-color: ${this.color.hex8 || this.color}`;
+      const size = `width: ${this.size}px;height: ${this.size}px;`;
+      if (this.toolName === "eraser") {
+        return `${size}background-color: white;border: 1px solid black;`;
+      }
+      return `${size}background-color: ${this.color.hex8 || this.color}`;
     },
     disabledColor() {
-      return this.toolName === null;
+      return this.toolName === null || this.toolName === "eraser";
     },
     disabledSize() {
       return this.toolName === null;

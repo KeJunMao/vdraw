@@ -3,7 +3,7 @@
     <div v-if="isInit" class="v-ui">
       <VHeader></VHeader>
     </div>
-    <canvas id="canvas" resize></canvas>
+    <canvas :style="cursor" id="canvas" resize></canvas>
   </div>
 </template>
 
@@ -18,6 +18,12 @@ export default {
     return {
       isInit: false
     };
+  },
+  computed: {
+    cursor() {
+      if (this.$store.state.toolName) return `cursor: none;`;
+      return `cursor: auto;`;
+    }
   },
   created() {
     paper.tool = null;
@@ -40,6 +46,7 @@ canvas {
   height: 100vh;
 }
 .v-ui {
+  background-color: white;
   position: absolute;
   width: 100%;
 }

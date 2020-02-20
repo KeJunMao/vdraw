@@ -3,6 +3,9 @@
     <VIconBtn :active="toolName === 'pencil'" @click="setTool('pencil')"
       >edit</VIconBtn
     >
+    <VIconBtn :active="toolName === 'eraser'" @click="setTool('eraser')"
+      >remove</VIconBtn
+    >
   </div>
 </template>
 

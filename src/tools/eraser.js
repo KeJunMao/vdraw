@@ -7,16 +7,14 @@ const local = {
   show: null
 };
 const args = {
-  lastSize: 0,
-  lastColor: "#00000FF"
+  lastSize: 0
 };
 
 const onMouseMove = event => {
   if (
     !local.show ||
     local.show.layer !== paper.project.activeLayer ||
-    args.lastSize !== store.state.pencilArgs.size ||
-    args.lastColor !== store.state.pencilArgs.color
+    args.layer !== store.state.eraserArgs.size
   ) {
     if (local.show) {
       local.show.remove();
@@ -24,40 +22,40 @@ const onMouseMove = event => {
     local.show = null;
     local.show = new paper.Path.Circle({
       center: [0, 0],
-      radius: store.state.pencilArgs.size / 2,
-      fillColor: store.state.pencilArgs.color
+      radius: store.state.eraserArgs.size / 2,
+      strokeColor: "black",
+      fillColor: "white"
     });
-    args.lastSize = store.state.pencilArgs.size;
-    args.lastColor = store.state.pencilArgs.color;
+    args.lastSize = store.state.eraserArgs.size;
   }
   local.show.position = event.point;
 };
 
 const onMouseDown = event => {
   local.path = new paper.Path();
-  local.path.strokeColor = store.state.pencilArgs.color;
-  local.path.strokeWidth = store.state.pencilArgs.size;
+  local.path.strokeColor = "white";
+  local.path.strokeWidth = store.state.eraserArgs.size;
+  local.path.blendMode = "destination-out";
   local.path.strokeCap = "round";
   local.path.strokeJoin = "round";
   local.path.add(event.point);
 };
 
 const onMouseDrag = event => {
+  local.show.position = event.point;
+  local.show.bringToFront();
   if (!local.path) return;
   local.path.add(event.point);
 };
 
 const onMouseUp = event => {
   local.path.add(event.point);
-  local.path.simplify();
   history.add(
     new DrawAction({
       path: local.path
     })
   );
   local.path = null;
-  local.show.remove();
-  local.show = null;
 };
 
 const onToggleIn = () => {};
