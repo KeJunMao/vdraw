@@ -9,7 +9,6 @@ export class DrawAction {
   }
   unexec() {
     this.removed = this._args.path.removeSegments();
-    console.log("remove", this.removed);
   }
 }
 
