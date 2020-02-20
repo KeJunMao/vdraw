@@ -56,13 +56,13 @@ const onMouseUp = event => {
     })
   );
   local.path = null;
-  local.show.remove();
+  if (local.show) local.show.remove();
   local.show = null;
 };
 
 const onToggleIn = () => {};
 const onToggleOut = () => {
-  local.show.remove();
+  if (local.show) local.show.remove();
   local.show = null;
 };
 export const tool = new paper.Tool();

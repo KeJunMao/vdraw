@@ -42,8 +42,10 @@ const onMouseDown = event => {
 };
 
 const onMouseDrag = event => {
-  local.show.position = event.point;
-  local.show.bringToFront();
+  if (local.show) {
+    local.show.position = event.point;
+    local.show.bringToFront();
+  }
   if (!local.path) return;
   local.path.add(event.point);
 };
@@ -60,7 +62,9 @@ const onMouseUp = event => {
 
 const onToggleIn = () => {};
 const onToggleOut = () => {
-  local.show.remove();
+  if (local.show) {
+    local.show.remove();
+  }
   local.show = null;
 };
 export const tool = new paper.Tool();

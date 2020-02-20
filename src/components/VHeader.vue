@@ -15,6 +15,7 @@
     <div class="v-header-line">|</div>
     <VIconBtn title="保存" @click="exportSvg">save</VIconBtn>
     <VIconBtn title="清空画布" @click="clear">clear</VIconBtn>
+    <VIconBtn title="帮助" @click="help">help</VIconBtn>
   </div>
 </template>
 
@@ -56,6 +57,12 @@ export default {
       paper.project.clear();
       history.clear();
     },
+    help() {
+      window.open(
+        `${window.location.protocol}//${window.location.host}/help.html`,
+        "_blank"
+      );
+    },
     undo() {
       history.undo();
     },
@@ -72,6 +79,7 @@ export default {
   align-items: center;
   padding: 20px;
   justify-content: center;
+  flex-wrap: wrap;
 }
 .v-header-line {
   margin: 0 6px;
