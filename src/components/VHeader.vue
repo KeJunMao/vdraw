@@ -4,10 +4,10 @@
     <div class="v-header-line">|</div>
     <VTools></VTools>
     <div class="v-header-line">|</div>
-    <VIconBtn :disabled="!history.canUndo()" title="撤销" @click="undo"
+    <VIconBtn :disabled="!history.canUndo()" title="撤销(Ctrl+Z)" @click="undo"
       >undo</VIconBtn
     >
-    <VIconBtn :disabled="!history.canRedo()" title="重做" @click="redo"
+    <VIconBtn :disabled="!history.canRedo()" title="重做(Ctrl+Y)" @click="redo"
       >redo</VIconBtn
     >
     <div class="v-header-line">|</div>

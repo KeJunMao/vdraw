@@ -19,6 +19,7 @@
 import VHeader from "@/components/VHeader";
 import paper from "paper";
 import PanAndZoom from "@/utils/panandzoom";
+import hotkey from "@/utils/hotkey";
 export default {
   components: {
     VHeader
@@ -59,6 +60,7 @@ export default {
     this.vdrawArgs.center = paper.view.center;
     this.vdrawArgs.zoom = paper.view.zoom;
     this.isInit = true;
+    document.addEventListener("keyup", hotkey);
   },
   methods: {
     panAndZoom(event) {

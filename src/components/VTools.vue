@@ -1,19 +1,19 @@
 <template>
   <div class="v-tools">
     <VIconBtn
-      title="画笔"
+      title="画笔(B)"
       :active="toolName === 'pencil'"
       @click="setTool('pencil')"
       >edit</VIconBtn
     >
     <VIconBtn
-      title="擦除"
+      title="擦除(E)"
       :active="toolName === 'eraser'"
       @click="setTool('eraser')"
       >remove</VIconBtn
     >
     <VIconBtn
-      title="选择"
+      title="选择(A)"
       :active="toolName === 'select'"
       @click="setTool('select')"
       >select_all</VIconBtn
