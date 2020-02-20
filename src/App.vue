@@ -1,8 +1,9 @@
 <template>
   <div>
-    <div class="v-ui">
+    <div v-if="isInit" class="v-ui">
       <VHeader></VHeader>
     </div>
+    <canvas id="canvas" resize></canvas>
   </div>
 </template>
 
@@ -13,9 +14,17 @@ export default {
   components: {
     VHeader
   },
+  data() {
+    return {
+      isInit: false
+    };
+  },
   created() {
-    paper.setup(document.getElementById("canvas"));
     paper.tool = null;
+  },
+  mounted() {
+    paper.setup("canvas");
+    this.isInit = true;
   }
 };
 </script>
