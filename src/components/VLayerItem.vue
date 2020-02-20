@@ -59,6 +59,7 @@ export default {
   },
   watch: {
     svg() {
+      this.$refs.view.innerHTML = "";
       this.$refs.view.appendChild(this.svg);
     }
   },
