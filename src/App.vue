@@ -11,7 +11,12 @@
       }}
       缩放: {{ (vdrawArgs.zoom * 100) | toFixed }}%
     </div>
-    <canvas @wheel="panAndZoom" :style="cursor" ref="canvas" resize></canvas>
+    <canvas
+      @wheel="panAndZoom"
+      :style="cursor + canvasBg"
+      ref="canvas"
+      resize
+    ></canvas>
   </div>
 </template>
 
@@ -46,6 +51,9 @@ export default {
       if (tool === null || tool === "brush") return `cursor: auto;`;
       if (tool !== "select") return `cursor: none;`;
       return `cursor: auto;`;
+    },
+    canvasBg() {
+      return `background-color: ${this.$store.state.canvasArgs.bgColor}fa;`;
     },
     canvas() {
       return this.$refs.canvas;
@@ -130,10 +138,10 @@ canvas {
   position: absolute;
   right: 0;
   bottom: 0;
-  background: #ccc;
+  background: rgba(238, 238, 238, 0.5);
   color: white;
   padding: 0 6px;
   border-radius: 2px;
-  opacity: 0.5;
+  font-size: 10px;
 }
 </style>

@@ -10,6 +10,9 @@
           </div>
           <div class="v-layers-content">
             <draggable handle=".handle" v-model="layers">
+              <div slot="header" class="v-layer-item">
+                <VLayerBg></VLayerBg>
+              </div>
               <VLayerItem
                 v-for="layer in layers"
                 :key="layer.id"
@@ -30,6 +33,7 @@
 <script>
 import VIconBtn from "@/components/VIconBtn";
 import VLayerItem from "@/components/VLayerItem";
+import VLayerBg from "@/components/VLayerBg";
 import draggable from "vuedraggable";
 import paper from "paper";
 import history from "@/utils/history";
@@ -38,6 +42,7 @@ export default {
   components: {
     VIconBtn,
     VLayerItem,
+    VLayerBg,
     draggable
   },
   data() {

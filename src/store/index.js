@@ -6,6 +6,9 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     toolName: null,
+    canvasArgs: {
+      bgColor: "#fff"
+    },
     pencilArgs: {
       color: "#000000",
       size: 10
@@ -35,6 +38,9 @@ export default new Vuex.Store({
       const tool = state[toolName + "Args"];
       tool.color = color || tool.color;
       tool.size = size || tool.size;
+    },
+    setCanvasArgs(state, args) {
+      Object.assign(state.canvasArgs, args);
     }
   },
   actions: {},
