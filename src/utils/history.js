@@ -1,7 +1,9 @@
+import paper from "paper";
 class History {
   constructor(limit) {
     this.limit = limit;
-    this.clear();
+    this.history = [];
+    this.current = 0;
   }
   add(action) {
     this.history.splice(this.current, this.history.length); // 删除分支
@@ -12,6 +14,7 @@ class History {
     // 新增新 action
     this.history.push(action);
     this.current = this.history.length;
+    localStorage.vdarw = paper.project.exportJSON();
   }
   undo() {
     if (this.canUndo()) {
@@ -32,6 +35,7 @@ class History {
   clear() {
     this.history = [];
     this.current = 0;
+    localStorage.vdarw = "[]";
   }
 }
 

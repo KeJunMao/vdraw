@@ -69,6 +69,7 @@ export default {
     this.vdrawArgs.zoom = paper.view.zoom;
     this.isInit = true;
     document.addEventListener("keyup", hotkey);
+    paper.project.importJSON(window.localStorage.vdarw || []);
   },
   methods: {
     panAndZoom(event) {
