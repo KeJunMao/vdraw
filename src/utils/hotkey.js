@@ -3,6 +3,9 @@ import store from "@/store";
 export default function({ key, ctrlKey, shiftKey, altKey }) {
   if (!ctrlKey && !shiftKey && !altKey) {
     if (key === "b") {
+      store.commit("setTool", "brush");
+    }
+    if (key === "p") {
       store.commit("setTool", "pencil");
     }
     if (key === "e") {

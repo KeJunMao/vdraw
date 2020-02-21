@@ -1,7 +1,13 @@
 <template>
   <div class="v-tools">
     <VIconBtn
-      title="画笔(B)"
+      title="刷子(B)"
+      :active="toolName === 'brush'"
+      @click="setTool('brush')"
+      >brush</VIconBtn
+    >
+    <VIconBtn
+      title="画笔(P)"
       :active="toolName === 'pencil'"
       @click="setTool('pencil')"
       >edit</VIconBtn

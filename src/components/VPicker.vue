@@ -56,10 +56,14 @@ export default {
       return `${size}background-color: ${this.color.hex8 || this.color}`;
     },
     disabledColor() {
-      return this.toolName === null || this.toolName === "eraser";
+      return (
+        this.toolName === null ||
+        this.toolName === "eraser" ||
+        this.toolName === "select"
+      );
     },
     disabledSize() {
-      return this.toolName === null;
+      return this.toolName === null || this.toolName === "select";
     }
   },
   watch: {

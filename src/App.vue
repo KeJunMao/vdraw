@@ -43,7 +43,7 @@ export default {
   computed: {
     cursor() {
       const tool = this.$store.state.toolName;
-      if (tool === null) return `cursor: auto;`;
+      if (tool === null || tool === "brush") return `cursor: auto;`;
       if (tool !== "select") return `cursor: none;`;
       return `cursor: auto;`;
     },

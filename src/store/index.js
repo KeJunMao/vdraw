@@ -12,6 +12,10 @@ export default new Vuex.Store({
     },
     eraserArgs: {
       size: 20
+    },
+    brushArgs: {
+      color: "#000000",
+      size: 20
     }
   },
   mutations: {
