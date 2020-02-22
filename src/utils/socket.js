@@ -1,0 +1,61 @@
+import io from "socket.io-client";
+import paper from "paper";
+import store from "@/store";
+import { createLayer } from "@/utils/shared";
+class VdrawSocket {
+  constructor(url) {
+    this.url = url;
+    this.socket = io.connect(this.url);
+    this.sys();
+    this.draw();
+  }
+  joinRoom(room) {
+    this.socket.emit("join", room);
+  }
+  sys() {
+    this.socket.on("sys", sys => {
+      if (sys.code === 201 || sys.code === 202) {
+        store.commit("setRoom", sys.data.room);
+        if (!store.state.user) {
+          store.commit("setUser", sys.data.user);
+        }
+      }
+      console.log(sys.msg);
+    });
+  }
+  draw() {
+    this.socket.on("draw", ({ layerName, pathName, action, data }) => {
+      console.log(data);
+      const user = data.user;
+      // 本地不再绘制
+      if (user.id !== store.state.user.id) {
+        console.log("draw");
+        const json = data.json;
+        let layer = paper.project.layers[layerName];
+        if (!paper.project.layers[layerName]) {
+          layer = createLayer(layerName);
+        }
+        if (action === "init") {
+          layer.importJSON(json);
+        } else if (action === "exec") {
+          layer.children[pathName].importJSON(json);
+        } else if (action === "unexec") {
+          layer.children[pathName].removeSegments();
+        }
+      }
+    });
+  }
+  sendAction({ type, data }) {
+    const room = store.state.room;
+    if (!room) return;
+    console.log("send");
+    const user = store.state.user;
+    this.socket.emit("action", {
+      room,
+      type,
+      user,
+      data
+    });
+  }
+}
+export default new VdrawSocket("http://localhost:3000");

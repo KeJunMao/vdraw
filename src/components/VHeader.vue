@@ -16,6 +16,8 @@
     <VIconBtn title="保存" @click="exportSvg">save</VIconBtn>
     <VIconBtn title="清空画布" @click="clear">clear</VIconBtn>
     <VIconBtn title="帮助" @click="help">help</VIconBtn>
+    <div class="v-header-line">|</div>
+    <VSocket></VSocket>
   </div>
 </template>
 
@@ -24,14 +26,17 @@ import VLayers from "@/components/VLayers";
 import VTools from "@/components/VTools";
 import VPicker from "@/components/VPicker";
 import VIconBtn from "@/components/VIconBtn";
+import VSocket from "@/components/VSocket";
 import paper from "paper";
 import history from "@/utils/history";
+import { createLayer } from "@/utils/shared";
 export default {
   components: {
     VLayers,
     VTools,
     VIconBtn,
-    VPicker
+    VPicker,
+    VSocket
   },
   data() {
     return {
@@ -56,6 +61,7 @@ export default {
     clear() {
       paper.project.clear();
       history.clear();
+      createLayer();
     },
     help() {
       window.open(

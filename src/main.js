@@ -4,10 +4,11 @@ import App from "./App.vue";
 import store from "./store";
 import "./registerServiceWorker";
 import VTooltip from "v-tooltip";
+import socket from "@/utils/socket";
 
 paper.install(window);
 Vue.prototype.$store = store;
-
+Vue.prototype.$socket = socket;
 Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
