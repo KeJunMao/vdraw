@@ -5,6 +5,7 @@ import store from "./store";
 import "./registerServiceWorker";
 import VTooltip from "v-tooltip";
 import socket from "@/utils/socket";
+import Snackbar from "@/plugins/snackbar";
 
 paper.install(window);
 Vue.prototype.$store = store;
@@ -12,8 +13,9 @@ Vue.prototype.$socket = socket;
 Vue.config.productionTip = false;
 
 Vue.use(VTooltip);
+Vue.use(Snackbar);
 
-new Vue({
+export default new Vue({
   store,
   render: h => h(App)
 }).$mount("#app");

@@ -68,11 +68,13 @@ class SysMsg {
   constructor(msg, code, data) {
     this.msg = msg;
     this.code = code || 200;
+    // info
     // 200 通用成功
     // 201 创建房间成功
     // 202 加入房间成功
     // 203 同步成功
     // 204 离开成功
+    // error
     // 400 密码错误
     // 500 服务器通用错误
     // 501 同步失败
@@ -83,14 +85,13 @@ class SysMsg {
 
 io.on("connection", socket => {
   socket.on("join", ({ name, password, user }) => {
-    console.log(socket.id);
     let isCreate = false;
     if (!allRoom[name]) {
       isCreate = true;
       allRoom[name] = new RoomInfo(name, password, user);
     }
     if (allRoom[name].password !== password) {
-      io.in(name).emit("sys", new SysMsg("密码错误！", 400));
+      io.to(socket.id).emit("sys", new SysMsg("密码错误！", 400));
       return;
     }
     socket.join(name);

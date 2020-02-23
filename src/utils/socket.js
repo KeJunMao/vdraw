@@ -2,6 +2,7 @@ import io from "socket.io-client";
 import paper from "paper";
 import store from "@/store";
 import { createLayer, clearProject } from "@/utils/shared";
+import app from "@/main";
 class VdrawSocket {
   constructor(url) {
     this.url = url;
@@ -38,7 +39,17 @@ class VdrawSocket {
       if (sys.code === 204 || sys.code === 502) {
         store.commit("setRoom", null);
       }
-      console.log(sys.msg);
+      let msgType = "open";
+      if (sys.code >= 200 && sys.code < 300) {
+        msgType = "info";
+      }
+      if (sys.code >= 400 && sys.code < 600) {
+        msgType = "error";
+      }
+      app.$snakbar({
+        msg: sys.msg,
+        type: msgType
+      });
     });
   }
   draw() {
@@ -46,7 +57,6 @@ class VdrawSocket {
       const user = data.user;
       // 本地不再绘制
       if (user.id !== store.state.user.id) {
-        console.log("draw");
         const json = data.json;
         let layer = paper.project.layers[layerName];
         if (!paper.project.layers[layerName]) {
@@ -90,7 +100,6 @@ class VdrawSocket {
   sendAction({ type, data }) {
     const room = store.state.room;
     if (!room) return;
-    console.log("send");
     const user = store.state.user;
     this.socket.emit("action", {
       room,

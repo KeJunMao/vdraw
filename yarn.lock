@@ -8998,6 +8998,11 @@ vuedraggable@^2.23.2:
   dependencies:
     sortablejs "^1.10.1"
 
+vuejs-snackbar@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npm.taobao.org/vuejs-snackbar/download/vuejs-snackbar-4.0.1.tgz#a521765b0de03dea69a3fd0438a71c49dc622fcb"
+  integrity sha1-pSF2Ww3gPeppo/0EOKccSdxiL8s=
+
 vuex@^3.1.2:
   version "3.1.2"
   resolved "https://registry.npm.taobao.org/vuex/download/vuex-3.1.2.tgz#a2863f4005aa73f2587e55c3fadf3f01f69c7d4d"

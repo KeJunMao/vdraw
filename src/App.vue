@@ -145,4 +145,8 @@ canvas {
   border-radius: 2px;
   font-size: 10px;
 }
+.snack-bar-wrap .snack-bar {
+  font-size: 13px;
+  padding: 6px 8px !important;
+}
 </style>

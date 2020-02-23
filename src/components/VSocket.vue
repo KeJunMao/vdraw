@@ -6,14 +6,10 @@
         <div class="v-socket-room">
           <template v-if="!room">
             <div>
-              <input placeholder="room name" v-model="inputRoom" type="text" />
+              <input placeholder="房间名称" v-model="inputRoom" type="text" />
             </div>
             <div>
-              <input
-                placeholder="password"
-                v-model="inputPass"
-                type="password"
-              />
+              <input placeholder="密码" v-model="inputPass" type="password" />
             </div>
           </template>
 
@@ -64,7 +60,21 @@ export default {
     },
     verify() {
       const inputRe = /^[A-Za-z]{1,10}$/;
+      if (!inputRe.test(this.inputRoom)) {
+        this.$snakbar({
+          msg: "请输入合法房间名！" + inputRe,
+          type: "warn"
+        });
+        return false;
+      }
       const passRe = /^[A-Za-z0-9]{0,10}$/;
+      if (!passRe.test(this.inputPass)) {
+        this.$snakbar({
+          msg: "请输入合法密码！" + passRe,
+          type: "warn"
+        });
+        return false;
+      }
       return inputRe.test(this.inputRoom) && passRe.test(this.inputPass);
     }
   }
