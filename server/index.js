@@ -6,13 +6,12 @@ let allRoom = {};
 let nextUserId = 1;
 
 class RoomInfo {
-  constructor(name, password, user) {
+  constructor(name, password) {
     this.name = name;
     this.password = password;
     this.time = 59;
     this.users = [];
     this.history = [];
-    this.addUser(user);
     this.init();
   }
   addUser(user) {
@@ -31,18 +30,19 @@ class RoomInfo {
         id: userId
       }
     );
+    const found = this.users.find(u => user.id === u.id);
+    if (found) {
+      this.del();
+      return [found, true];
+    }
     this.users.push(user);
-    return user;
+    return [user, false];
   }
   removeUser(user) {
     this.users = this.users.filter(v => {
       return v.id !== user.id;
     });
-
-    // 无用户时释放房间
-    if (this.users.length === 0) {
-      this.del();
-    }
+    this.del();
   }
   addHistory(emitData) {
     this.history.push(emitData);
@@ -61,7 +61,10 @@ class RoomInfo {
     // );
   }
   del() {
-    delete allRoom[this.name];
+    // 无用户时释放房间
+    if (this.users.length === 0) {
+      delete allRoom[this.name];
+    }
   }
 }
 class SysMsg {
@@ -75,7 +78,9 @@ class SysMsg {
     // 203 同步成功
     // 204 离开成功
     // error
-    // 400 密码错误
+    // 400 通用客户端错误
+    // 401 密码错误
+    // 402 重复加入
     // 500 服务器通用错误
     // 501 同步失败
     // 502 要退出的房间不存在
@@ -85,24 +90,33 @@ class SysMsg {
 
 io.on("connection", socket => {
   socket.on("join", ({ name, password, user }) => {
-    let isCreate = false;
+    let isCreate = false,
+      error;
     if (!allRoom[name]) {
       isCreate = true;
-      allRoom[name] = new RoomInfo(name, password, user);
+      allRoom[name] = new RoomInfo(name, password);
+      [user, error] = allRoom[name].addUser(user);
+      if (error) {
+        io.to(socket.id).emit("sys", new SysMsg("加入房间失败！", 500));
+        return;
+      }
     }
     if (allRoom[name].password !== password) {
-      io.to(socket.id).emit("sys", new SysMsg("密码错误！", 400));
+      io.to(socket.id).emit("sys", new SysMsg("密码错误！", 401));
       return;
     }
     socket.join(name);
     let msg = "";
     let code = 200;
     if (isCreate) {
-      user = allRoom[name].users[0];
       msg = user.name + "创建房间！";
       code = 201;
     } else {
-      user = allRoom[name].addUser(user);
+      [user, error] = allRoom[name].addUser(user);
+      if (error) {
+        io.to(socket.id).emit("sys", new SysMsg("你已经在房间！", 402));
+        return;
+      }
       msg = user.name + "加入本房间！";
       code = 202;
     }
