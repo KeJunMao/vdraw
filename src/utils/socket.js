@@ -109,4 +109,9 @@ class VdrawSocket {
     });
   }
 }
-export default new VdrawSocket("http://localhost:3000");
+
+let url = "http://localhost:3000";
+if (process.env.NODE_ENV === "production") {
+  url = "https://vdraw.herokuapp.com/";
+}
+export default new VdrawSocket(url);
