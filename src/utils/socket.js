@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import paper from "paper";
 import store from "@/store";
-import { createLayer } from "@/utils/shared";
+import { createLayer, clearProject } from "@/utils/shared";
 class VdrawSocket {
   constructor(url) {
     this.url = url;
@@ -9,6 +9,7 @@ class VdrawSocket {
     this.sys();
     this.draw();
     this.layer();
+    this.clear();
   }
   joinRoom(room) {
     this.socket.emit("join", room);
@@ -58,6 +59,15 @@ class VdrawSocket {
           const layer = createLayer(layerName);
           layer.importJSON(data.json);
         }
+      }
+    });
+  }
+  clear() {
+    this.socket.on("clear", ({ data }) => {
+      const user = data.user;
+      if (user.id !== store.state.user.id) {
+        const project = clearProject();
+        project.importJSON(data.json);
       }
     });
   }

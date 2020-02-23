@@ -86,10 +86,11 @@ io.on("connection", socket => {
   socket.on("action", ({ room, type, data, user }) => {
     if (!room) return;
     if (allRoom[room.name] && allRoom[room.name].password === room.password) {
+      let emitData = {};
       if (type === "draw") {
         const { layerName, pathName, action, json } = data;
-        const emitData = {
-          type: "draw",
+        emitData = {
+          type,
           layerName,
           pathName,
           action,
@@ -98,13 +99,11 @@ io.on("connection", socket => {
             user
           }
         };
-        io.in(room.name).emit(emitData.type, emitData);
-        allRoom[room.name].addHistory(emitData);
       }
       if (type === "layer") {
         const { layerName, action, json } = data;
-        const emitData = {
-          type: "layer",
+        emitData = {
+          type,
           layerName,
           action,
           data: {
@@ -112,6 +111,18 @@ io.on("connection", socket => {
             user
           }
         };
+      }
+      if (type === "clear") {
+        const { json } = data;
+        emitData = {
+          type,
+          data: {
+            json,
+            user
+          }
+        };
+      }
+      if (emitData.type) {
         io.in(room.name).emit(emitData.type, emitData);
         allRoom[room.name].addHistory(emitData);
       }
