@@ -1,14 +1,31 @@
 <template>
   <div class="v-socket">
-    <v-popover :disabled="!!room" offset="16">
-      <VIconBtn @click="toggleOnline">{{
-        room ? "cloud_queue" : "cloud_off"
-      }}</VIconBtn>
+    <v-popover offset="16">
+      <VIconBtn>{{ room ? "cloud_queue" : "cloud_off" }}</VIconBtn>
       <template slot="popover">
         <div class="v-socket-room">
-          <div>名称：<input v-model="inputRoom" type="text" /></div>
-          <div>密码：<input v-model="inputPass" type="password" /></div>
-          <div @click="toggleOnline">加入</div>
+          <template v-if="!room">
+            <div>
+              <input placeholder="room name" v-model="inputRoom" type="text" />
+            </div>
+            <div>
+              <input
+                placeholder="password"
+                v-model="inputPass"
+                type="password"
+              />
+            </div>
+          </template>
+
+          <div class="v-btn" @click="toggleOnline">
+            <i class="material-icons">{{ room ? "directions_run" : "send" }}</i
+            >{{ room ? "离开房间" : "加入/创建" }}
+          </div>
+          <div v-if="room">
+            <ul class="v-socket-users">
+              <li v-for="user in room.users" :key="user.id">{{ user.name }}</li>
+            </ul>
+          </div>
         </div>
       </template>
     </v-popover>
@@ -35,7 +52,7 @@ export default {
     toggleOnline() {
       if (this.room) {
         // leave
-        this.$store.commit("setRoom", null);
+        this.$socket.leaveRoom();
         return;
       }
       if (this.verify()) {
@@ -61,5 +78,40 @@ export default {
   background-color: #fff;
   padding: 12px;
   box-sizing: border-box;
+  text-align: center;
+}
+.v-socket-room input {
+  border-radius: 2px;
+  border: 1px solid #abab;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+}
+.v-btn {
+  cursor: pointer;
+  display: inline-block;
+  min-width: 88px;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 36px;
+  text-align: center;
+  border: none;
+  border-radius: 2px;
+}
+.v-btn:hover {
+  background-color: #0000001a;
+}
+.v-btn .material-icons {
+  font-size: inherit;
+  margin-right: 5px;
+  line-height: inherit;
+}
+.v-socket-users {
+  list-style: none;
+  text-align: center;
+  padding: 0;
 }
 </style>

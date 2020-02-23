@@ -12,7 +12,20 @@ class VdrawSocket {
     this.clear();
   }
   joinRoom(room) {
-    this.socket.emit("join", room);
+    const user = store.state.user;
+    this.socket.emit("join", {
+      ...room,
+      user
+    });
+  }
+  leaveRoom() {
+    const user = store.state.user;
+    const room = store.state.room;
+    this.socket.emit("leave", {
+      password: room.password,
+      name: room.name,
+      user
+    });
   }
   sys() {
     this.socket.on("sys", sys => {
@@ -21,6 +34,9 @@ class VdrawSocket {
         if (!store.state.user) {
           store.commit("setUser", sys.data.user);
         }
+      }
+      if (sys.code === 204 || sys.code === 502) {
+        store.commit("setRoom", null);
       }
       console.log(sys.msg);
     });
