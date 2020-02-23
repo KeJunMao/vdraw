@@ -8,6 +8,7 @@
       <VIconBtn
         title="顺序调整"
         class="handle"
+        disabled
         :class="!active ? 'v-layer-item-button--hidden' : ''"
         >vertical_align_center</VIconBtn
       >

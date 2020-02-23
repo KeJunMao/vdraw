@@ -9,7 +9,7 @@
             <VIconBtn @click="addLayer">add</VIconBtn>
           </div>
           <div class="v-layers-content">
-            <draggable handle=".handle" v-model="layers">
+            <draggable :disabled="true" handle=".handle" v-model="layers">
               <div slot="header" class="v-layer-item">
                 <VLayerBg></VLayerBg>
               </div>
@@ -38,6 +38,7 @@ import draggable from "vuedraggable";
 import paper from "paper";
 import history from "@/utils/history";
 import { LayerAction } from "@/utils/actions";
+import { createLayer } from "@/utils/shared";
 export default {
   components: {
     VIconBtn,
@@ -51,9 +52,14 @@ export default {
       layers: paper.project.layers
     };
   },
+  mounted() {
+    if (!paper.project.layers.length) {
+      this.addLayer();
+    }
+  },
   methods: {
     addLayer() {
-      const layer = new paper.Layer();
+      const layer = createLayer();
       history.add(
         new LayerAction({
           project: paper.project,
@@ -70,6 +76,7 @@ export default {
       layer.visible = !layer.visible;
     },
     remove(layer) {
+      layer.remove();
       history.add(
         new LayerAction({
           project: paper.project,
@@ -77,7 +84,6 @@ export default {
           layer
         })
       );
-      layer.remove();
     }
   }
 };

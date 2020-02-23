@@ -6,6 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     toolName: null,
+    room: null,
+    user: null,
     canvasArgs: {
       bgColor: "#fff"
     },
@@ -41,6 +43,12 @@ export default new Vuex.Store({
     },
     setCanvasArgs(state, args) {
       Object.assign(state.canvasArgs, args);
+    },
+    setRoom(state, room) {
+      state.room = room;
+    },
+    setUser(state, user) {
+      state.user = user;
     }
   },
   actions: {},
