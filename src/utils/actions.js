@@ -35,6 +35,7 @@ export class DrawAction {
 export class LayerAction {
   constructor({ project, layer, type }) {
     this._args = { project, layer, type };
+    this.send();
   }
   exec() {
     if (this._args.type === "add") {
@@ -45,6 +46,7 @@ export class LayerAction {
     if (this._args.type === "remove") {
       this._args.layer.remove();
     }
+    this.send("exec");
   }
   unexec() {
     if (this._args.type === "add") {
@@ -54,5 +56,21 @@ export class LayerAction {
     if (this._args.type === "remove") {
       this._args.project.addLayer(this._args.layer);
     }
+    this.send("unexec");
+  }
+  send(action = "init") {
+    const layerName = this._args.layer.name;
+    let json = [];
+    if (this._args.type === "add" && action !== "init") {
+      json = this.removed.exportJSON();
+    }
+    socket.sendAction({
+      type: "layer",
+      data: {
+        layerName,
+        action: `${action}:${this._args.type}`,
+        json
+      }
+    });
   }
 }

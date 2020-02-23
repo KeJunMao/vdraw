@@ -101,6 +101,20 @@ io.on("connection", socket => {
         io.in(room.name).emit(emitData.type, emitData);
         allRoom[room.name].addHistory(emitData);
       }
+      if (type === "layer") {
+        const { layerName, action, json } = data;
+        const emitData = {
+          type: "layer",
+          layerName,
+          action,
+          data: {
+            json,
+            user
+          }
+        };
+        io.in(room.name).emit(emitData.type, emitData);
+        allRoom[room.name].addHistory(emitData);
+      }
     }
   });
 });

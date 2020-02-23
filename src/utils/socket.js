@@ -8,6 +8,7 @@ class VdrawSocket {
     this.socket = io.connect(this.url);
     this.sys();
     this.draw();
+    this.layer();
   }
   joinRoom(room) {
     this.socket.emit("join", room);
@@ -25,7 +26,6 @@ class VdrawSocket {
   }
   draw() {
     this.socket.on("draw", ({ layerName, pathName, action, data }) => {
-      console.log(data);
       const user = data.user;
       // 本地不再绘制
       if (user.id !== store.state.user.id) {
@@ -41,6 +41,22 @@ class VdrawSocket {
           layer.children[pathName].importJSON(json);
         } else if (action === "unexec") {
           layer.children[pathName].removeSegments();
+        }
+      }
+    });
+  }
+  layer() {
+    this.socket.on("layer", ({ layerName, action, data }) => {
+      const user = data.user;
+      if (user.id !== store.state.user.id) {
+        if (action === "init:add") {
+          createLayer(layerName);
+        } else if (action === "init:remove" || action === "exec:remove") {
+          paper.project.layers[layerName] &&
+            paper.project.layers[layerName].remove();
+        } else if (action === "exec:add" || action === "unexec:add") {
+          const layer = createLayer(layerName);
+          layer.importJSON(data.json);
         }
       }
     });
