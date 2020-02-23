@@ -47,14 +47,15 @@ export default new Vuex.Store({
     },
     setRoom(state, room) {
       state.room = room;
-      state.socketLock = false;
     },
     setUser(state, user) {
       state.user = user;
-      state.socketLock = false;
     },
     lockSocket(state) {
       state.socketLock = true;
+    },
+    unLockSocket(state) {
+      state.socketLock = false;
     }
   },
   actions: {},

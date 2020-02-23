@@ -12,7 +12,6 @@ class VdrawSocket {
   joinRoom(room) {
     const user = store.state.user;
     const json = paper.project.exportJSON();
-    console.log("send json");
     this.socket.emit("join", {
       ...room,
       user,
@@ -56,6 +55,7 @@ class VdrawSocket {
         msg: sys.msg,
         type: msgType
       });
+      store.commit("unLockSocket");
     });
   }
   draw() {
