@@ -7,16 +7,18 @@ class VdrawSocket {
   constructor(url) {
     this.url = url;
     this.socket = io.connect(this.url);
-    this.sys();
-    this.draw();
-    this.layer();
-    this.clear();
+    this.initRoom();
   }
   joinRoom(room) {
     const user = store.state.user;
+    const json = paper.project.exportJSON();
+    console.log("send json");
     this.socket.emit("join", {
       ...room,
-      user
+      user,
+      data: {
+        json
+      }
     });
   }
   leaveRoom() {
@@ -30,13 +32,17 @@ class VdrawSocket {
   }
   sys() {
     this.socket.on("sys", sys => {
-      if (sys.code === 201 || sys.code === 202) {
-        store.commit("setRoom", sys.data.room);
+      if (sys.code === 201 || sys.code === 202 || sys.code === 204) {
+        store.commit("setRoom", {
+          name: sys.data.room.name,
+          password: sys.data.room.password,
+          users: sys.data.room.users
+        });
         if (!store.state.user) {
           store.commit("setUser", sys.data.user);
         }
       }
-      if (sys.code === 204 || sys.code === 502) {
+      if (sys.code === 205 || sys.code === 502) {
         store.commit("setRoom", null);
       }
       let msgType = "open";
@@ -95,6 +101,16 @@ class VdrawSocket {
         const project = clearProject();
         project.importJSON(data.json);
       }
+    });
+  }
+  initRoom() {
+    this.sys();
+    this.draw();
+    this.layer();
+    this.clear();
+    this.socket.on("init", ({ json }) => {
+      clearProject();
+      paper.project.importJSON(json);
     });
   }
   sendAction({ type, data }) {

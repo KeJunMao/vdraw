@@ -8,6 +8,7 @@ export default new Vuex.Store({
     toolName: null,
     room: null,
     user: null,
+    socketLock: false,
     canvasArgs: {
       bgColor: "#fff"
     },
@@ -46,9 +47,14 @@ export default new Vuex.Store({
     },
     setRoom(state, room) {
       state.room = room;
+      state.socketLock = false;
     },
     setUser(state, user) {
       state.user = user;
+      state.socketLock = false;
+    },
+    lockSocket(state) {
+      state.socketLock = true;
     }
   },
   actions: {},

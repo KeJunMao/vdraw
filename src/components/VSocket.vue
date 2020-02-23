@@ -13,7 +13,7 @@
             </div>
           </template>
 
-          <div class="v-btn" @click="toggleOnline">
+          <div :disabled="socketLock" class="v-btn" @click="toggleOnline">
             <i class="material-icons">{{ room ? "directions_run" : "send" }}</i
             >{{ room ? "离开房间" : "加入/创建" }}
           </div>
@@ -42,10 +42,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(["room"])
+    ...mapState(["room", "socketLock"])
   },
   methods: {
     toggleOnline() {
+      if (this.socketLock) return;
+      this.$store.commit("lockSocket");
       if (this.room) {
         // leave
         this.$socket.leaveRoom();
@@ -118,6 +120,11 @@ export default {
   font-size: inherit;
   margin-right: 5px;
   line-height: inherit;
+}
+.v-btn[disabled="disabled"] {
+  background: none;
+  cursor: not-allowed;
+  color: #ccc;
 }
 .v-socket-users {
   list-style: none;
