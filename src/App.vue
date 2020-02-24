@@ -8,20 +8,13 @@
       {{ vdrawArgs.size.height | toFixed }} 缩放:
       {{ (vdrawArgs.zoom * 100) | toFixed }}%
     </div>
-    <canvas
-      @wheel="panAndZoom"
-      :style="cursor + canvasBg"
-      ref="canvas"
-      resize
-    ></canvas>
+    <canvas :style="cursor + canvasBg" ref="canvas" id="canvas" resize></canvas>
   </div>
 </template>
 
 <script>
 import VHeader from "@/components/VHeader";
-import paper from "paper";
-import PanAndZoom from "@/utils/panandzoom";
-import hotkey from "@/utils/hotkey";
+import setup from "@/utils/setup";
 export default {
   components: {
     VHeader
@@ -33,10 +26,6 @@ export default {
         size: {
           width: 0,
           height: 0
-        },
-        center: {
-          x: 0,
-          y: 0
         },
         zoom: 0
       }
@@ -56,41 +45,8 @@ export default {
       return this.$refs.canvas;
     }
   },
-  created() {
-    paper.tool = null;
-  },
   mounted() {
-    paper.setup(this.canvas);
-    this.vdrawArgs.size = paper.view.size;
-    this.vdrawArgs.zoom = paper.view.zoom;
-    this.isInit = true;
-    document.addEventListener("keyup", hotkey);
-    paper.project.importJSON(window.localStorage.vdarw || []);
-  },
-  methods: {
-    panAndZoom(event) {
-      const view = paper.project.view;
-      if (event.altKey) {
-        const mousePosition = new paper.Point(event.offsetX, event.offsetY);
-        const viewPosition = view.viewToProject(mousePosition);
-        const _ref = new PanAndZoom().stableZoom(
-          view.zoom,
-          event.deltaY,
-          view.center,
-          viewPosition
-        );
-        const newZoom = _ref[0];
-        const offset = _ref[1];
-        view.zoom = newZoom;
-        view.center = paper.view.center.add(offset);
-      } else if (event.shiftKey) {
-        const delta = new paper.Point(-event.deltaX, -event.deltaY)
-          .divide(view.scaling)
-          .rotate(-view.rotation, new paper.Point());
-        view.translate(delta);
-      }
-      this.vdrawArgs.zoom = view.zoom;
-    }
+    setup(this);
   },
   filters: {
     toFixed(value) {

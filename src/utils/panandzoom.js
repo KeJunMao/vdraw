@@ -23,3 +23,26 @@ export default class PanAndZoom {
     return [newZoom, a];
   }
 }
+
+export function panAndZoom(event) {
+  const view = paper.project.view;
+  if (event.altKey) {
+    const mousePosition = new paper.Point(event.offsetX, event.offsetY);
+    const viewPosition = view.viewToProject(mousePosition);
+    const _ref = new PanAndZoom().stableZoom(
+      view.zoom,
+      event.deltaY,
+      view.center,
+      viewPosition
+    );
+    const newZoom = _ref[0];
+    const offset = _ref[1];
+    view.zoom = newZoom;
+    view.center = paper.view.center.add(offset);
+  } else if (event.shiftKey) {
+    const delta = new paper.Point(-event.deltaX, -event.deltaY)
+      .divide(view.scaling)
+      .rotate(-view.rotation, new paper.Point());
+    view.translate(delta);
+  }
+}
