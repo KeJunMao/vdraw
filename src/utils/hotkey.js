@@ -1,5 +1,6 @@
 import history from "@/utils/history";
 import store from "@/store";
+import paper from "paper";
 export default function({ key, ctrlKey, shiftKey, altKey }) {
   if (!ctrlKey && !shiftKey && !altKey) {
     if (key === "b") {
@@ -22,6 +23,10 @@ export default function({ key, ctrlKey, shiftKey, altKey }) {
     }
     if (key === "y") {
       history.redo();
+    }
+    if (key === "0") {
+      paper.project.view.zoom = 1;
+      paper.project.view.center = paper.project.view.size.divide(2);
     }
     return;
   }
