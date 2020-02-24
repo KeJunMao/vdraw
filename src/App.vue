@@ -5,11 +5,8 @@
     </div>
     <div v-if="isInit" class="pan-and-zoom">
       大小: {{ vdrawArgs.size.width | toFixed }} *
-      {{ vdrawArgs.size.height | toFixed }} 位置:
-      {{ vdrawArgs.center.x | toFixed }},{{
-        vdrawArgs.center.y | toFixed
-      }}
-      缩放: {{ (vdrawArgs.zoom * 100) | toFixed }}%
+      {{ vdrawArgs.size.height | toFixed }} 缩放:
+      {{ (vdrawArgs.zoom * 100) | toFixed }}%
     </div>
     <canvas
       @wheel="panAndZoom"
@@ -65,7 +62,6 @@ export default {
   mounted() {
     paper.setup(this.canvas);
     this.vdrawArgs.size = paper.view.size;
-    this.vdrawArgs.center = paper.view.center;
     this.vdrawArgs.zoom = paper.view.zoom;
     this.isInit = true;
     document.addEventListener("keyup", hotkey);
@@ -73,43 +69,27 @@ export default {
   },
   methods: {
     panAndZoom(event) {
-      if (event.shiftKey) {
-        let lowestDelta;
-        const absDelta = Math.max(
-          Math.abs(event.deltaY),
-          Math.abs(event.deltaX)
-        );
-
-        if (!lowestDelta || absDelta < lowestDelta) {
-          lowestDelta = absDelta;
-        }
-        const deltaFactor = lowestDelta;
-
-        // do pan
-        paper.view.center = new PanAndZoom().changeCenter(
-          paper.view.center,
-          event.deltaX,
-          event.deltaY,
-          deltaFactor
-        );
-      }
+      const view = paper.project.view;
       if (event.altKey) {
-        // do zoom
         const mousePosition = new paper.Point(event.offsetX, event.offsetY);
-        const viewPosition = paper.view.viewToProject(mousePosition);
+        const viewPosition = view.viewToProject(mousePosition);
         const _ref = new PanAndZoom().stableZoom(
-          paper.view.zoom,
+          view.zoom,
           event.deltaY,
-          paper.view.center,
+          view.center,
           viewPosition
         );
         const newZoom = _ref[0];
         const offset = _ref[1];
-        paper.view.zoom = newZoom;
-        paper.view.center = paper.view.center.add(offset);
+        view.zoom = newZoom;
+        view.center = paper.view.center.add(offset);
+      } else if (event.shiftKey) {
+        const delta = new paper.Point(-event.deltaX, -event.deltaY)
+          .divide(view.scaling)
+          .rotate(-view.rotation, new paper.Point());
+        view.translate(delta);
       }
-      this.vdrawArgs.center = paper.view.center;
-      this.vdrawArgs.zoom = paper.view.zoom;
+      this.vdrawArgs.zoom = view.zoom;
     }
   },
   filters: {
