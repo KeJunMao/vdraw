@@ -47,13 +47,14 @@ export default {
   methods: {
     toggleOnline() {
       if (this.socketLock) return;
-      this.$store.commit("lockSocket");
       if (this.room) {
         // leave
+        this.$store.commit("lockSocket");
         this.$socket.leaveRoom();
         return;
       }
       if (this.verify()) {
+        this.$store.commit("lockSocket");
         this.$socket.joinRoom({
           name: this.inputRoom,
           password: this.inputPass
