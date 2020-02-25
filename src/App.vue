@@ -22,6 +22,7 @@
 <script>
 import VHeader from "@/components/VHeader";
 import setup from "@/utils/setup";
+import hotkeys from "hotkeys-js";
 export default {
   components: {
     VHeader
@@ -64,6 +65,7 @@ export default {
   },
   mounted() {
     setup(this);
+    hotkeys("ctrl+t", this.toggleUi);
   },
   methods: {
     toggleUi() {

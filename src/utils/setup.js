@@ -4,7 +4,7 @@ import paper from "paper";
 export default function(app) {
   paper.setup(app.canvas);
   paper.tool = null;
-  window.addEventListener("keyup", hotkey);
+  hotkey(app);
   document.getElementById("canvas").addEventListener("wheel", event => {
     panAndZoom(event);
     app.vdrawArgs.zoom = paper.view.zoom;

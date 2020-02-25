@@ -7,15 +7,18 @@
     <VIconBtn :disabled="!history.canUndo()" title="撤销(Ctrl+Z)" @click="undo"
       >undo</VIconBtn
     >
-    <VIconBtn :disabled="!history.canRedo()" title="重做(Ctrl+Y)" @click="redo"
+    <VIconBtn
+      :disabled="!history.canRedo()"
+      title="重做(Ctrl+Shift+Z)"
+      @click="redo"
       >redo</VIconBtn
     >
     <div class="v-header-line">|</div>
     <VLayers></VLayers>
     <div class="v-header-line">|</div>
-    <VIconBtn title="保存" @click="exportSvg">save</VIconBtn>
+    <VIconBtn title="保存(Ctrl+S)" @click="exportSvg">save</VIconBtn>
     <VIconBtn title="清空画布" @click="clear">clear</VIconBtn>
-    <VIconBtn title="帮助" @click="help">help</VIconBtn>
+    <VIconBtn title="帮助(F1)" @click="help">help</VIconBtn>
     <div class="v-header-line">|</div>
     <VSocket></VSocket>
   </div>
@@ -31,6 +34,7 @@ import paper from "paper";
 import history from "@/utils/history";
 import { clearProject, createLayer } from "@/utils/shared";
 import socket from "@/utils/socket";
+import hotkeys from "hotkeys-js";
 export default {
   components: {
     VLayers,
@@ -43,6 +47,10 @@ export default {
     return {
       history
     };
+  },
+  mounted() {
+    hotkeys("ctrl+s", this.exportSvg);
+    hotkeys("f1", this.help);
   },
   methods: {
     exportSvg(fileName) {

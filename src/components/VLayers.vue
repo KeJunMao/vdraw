@@ -6,7 +6,9 @@
         <div class="v-layers-box">
           <div class="v-layers-header">
             <div>图层</div>
-            <VIconBtn @click="addLayer">add</VIconBtn>
+            <VIconBtn title="新建图层(Ctrl+Shift+N)" @click="addLayer"
+              >add</VIconBtn
+            >
           </div>
           <div class="v-layers-content">
             <draggable :disabled="true" handle=".handle" v-model="layers">
@@ -39,6 +41,7 @@ import paper from "paper";
 import history from "@/utils/history";
 import { LayerAction } from "@/utils/actions";
 import { createLayer } from "@/utils/shared";
+import hotkeys from "hotkeys-js";
 export default {
   components: {
     VIconBtn,
@@ -53,6 +56,7 @@ export default {
     };
   },
   mounted() {
+    hotkeys("ctrl+shift+n", this.addLayer);
     if (!paper.project.layers.length) {
       this.addLayer();
     }

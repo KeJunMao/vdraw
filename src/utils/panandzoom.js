@@ -37,6 +37,7 @@ export function panAndZoom(event) {
     );
     const newZoom = _ref[0];
     const offset = _ref[1];
+    if (newZoom <= 0.05 || newZoom >= 100) return;
     view.zoom = newZoom;
     view.center = paper.view.center.add(offset);
   } else if (event.shiftKey) {
