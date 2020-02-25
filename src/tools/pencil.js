@@ -49,7 +49,9 @@ const onMouseDrag = event => {
 
 const onMouseUp = event => {
   local.path.add(event.point);
-  local.path.simplify();
+  if (store.state.pencilArgs.shake) {
+    local.path.simplify();
+  }
   history.add(
     new DrawAction({
       path: local.path

@@ -5,6 +5,13 @@
       <template slot="popover">
         <div class="v-size-picker">
           <VueSlider v-model="size" :min="1"></VueSlider>
+          <div class="v-size-dd">
+            <VSwitch
+              :disabled="this.toolArgs.shake === undefined"
+              v-model="shake"
+              >抖动修复</VSwitch
+            >
+          </div>
           <div class="v-size-picker-preview">
             <div
               :style="previewDotStyle"
@@ -31,16 +38,19 @@ import VIconBtn from "@/components/VIconBtn";
 import { mapState } from "vuex";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/material.css";
+import VSwitch from "@/components/VSwitch";
 export default {
   components: {
     VIconBtn,
     ChromePicker,
-    VueSlider
+    VueSlider,
+    VSwitch
   },
   data() {
     return {
       color: "#000000",
-      size: 1
+      size: 1,
+      shake: null
     };
   },
   computed: {
@@ -74,6 +84,9 @@ export default {
       if (this.toolArgs.size) {
         this.size = this.toolArgs.size;
       }
+      if (this.toolArgs.shake !== undefined) {
+        this.shake = this.toolArgs.shake;
+      }
     },
     color() {
       if (this.toolArgs.color) {
@@ -88,6 +101,14 @@ export default {
         this.$store.commit("setArgs", {
           toolName: this.toolName,
           size: this.size
+        });
+      }
+    },
+    shake() {
+      if (this.toolArgs.shake !== undefined) {
+        this.$store.commit("setArgs", {
+          toolName: this.toolName,
+          shake: this.shake
         });
       }
     }
@@ -105,6 +126,9 @@ export default {
   background-color: #fff;
   padding: 12px;
   box-sizing: border-box;
+}
+.v-size-dd {
+  margin: 8px 0;
 }
 .v-size-picker-preview {
   --square-color: #ccc;

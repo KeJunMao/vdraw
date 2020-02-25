@@ -14,14 +14,16 @@ export default new Vuex.Store({
     },
     pencilArgs: {
       color: "#000000",
-      size: 10
+      size: 10,
+      shake: true
     },
     eraserArgs: {
       size: 20
     },
     brushArgs: {
       color: "#000000",
-      size: 20
+      size: 20,
+      shake: true
     }
   },
   mutations: {
@@ -37,10 +39,13 @@ export default new Vuex.Store({
         }
       }
     },
-    setArgs(state, { toolName, color, size }) {
+    setArgs(state, { toolName, color, size, shake }) {
       const tool = state[toolName + "Args"];
       tool.color = color || tool.color;
       tool.size = size || tool.size;
+      if (shake !== undefined) {
+        tool.shake = shake;
+      }
     },
     setCanvasArgs(state, args) {
       Object.assign(state.canvasArgs, args);
