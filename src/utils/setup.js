@@ -3,6 +3,7 @@ import { panAndZoom } from "@/utils/panandzoom";
 import paper from "paper";
 export default function(app) {
   paper.setup(app.canvas);
+  paper.tool = null;
   window.addEventListener("keyup", hotkey);
   document.getElementById("canvas").addEventListener("wheel", event => {
     panAndZoom(event);

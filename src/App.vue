@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div v-if="isInit" class="v-ui">
+    <div
+      :style="vUiStyle"
+      ref="vui"
+      v-if="isInit"
+      @dblclick="toggleUi"
+      class="v-ui"
+      :class="hiddenUi ? 'v-ui--hidden' : ''"
+    >
       <VHeader></VHeader>
     </div>
     <div v-if="isInit" class="pan-and-zoom">
@@ -28,7 +35,8 @@ export default {
           height: 0
         },
         zoom: 0
-      }
+      },
+      hiddenUi: false
     };
   },
   computed: {
@@ -43,10 +51,24 @@ export default {
     },
     canvas() {
       return this.$refs.canvas;
+    },
+    vUiStyle() {
+      const vui = this.$refs.vui;
+      if (vui && this.hiddenUi) {
+        const y = vui.clientHeight / 2;
+        const x = vui.clientWidth - y;
+        return `border-radius: ${y}px;transform: translate(${-x}px, ${-y}px);`;
+      }
+      return this.hiddenUi;
     }
   },
   mounted() {
     setup(this);
+  },
+  methods: {
+    toggleUi() {
+      this.hiddenUi = !this.hiddenUi;
+    }
   },
   filters: {
     toFixed(value) {
@@ -70,6 +92,14 @@ canvas {
   background-color: white;
   position: absolute;
   width: 100%;
+  transition: all 0.3s;
+  user-select: none;
+}
+.v-ui--hidden {
+  background: #ccc;
+}
+.v-ui--hidden .v-header {
+  visibility: hidden;
 }
 .pan-and-zoom {
   position: absolute;
