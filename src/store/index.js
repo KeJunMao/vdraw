@@ -54,7 +54,7 @@ export default new Vuex.Store({
       state.room = room;
     },
     setUser(state, user) {
-      state.user = user;
+      state.user = Object.assign(state.user || {}, user);
     },
     lockSocket(state) {
       state.socketLock = true;

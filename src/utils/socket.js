@@ -37,7 +37,7 @@ class VdrawSocket {
           password: sys.data.room.password,
           users: sys.data.room.users
         });
-        if (!store.state.user) {
+        if (!store.state.user || !store.state.user.id) {
           store.commit("setUser", sys.data.user);
         }
       }

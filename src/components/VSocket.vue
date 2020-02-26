@@ -6,13 +6,20 @@
         <div class="v-socket-room">
           <template v-if="!room">
             <div>
-              <input placeholder="房间名称" v-model="inputRoom" type="text" />
+              <input
+                required
+                placeholder="*房间名称"
+                v-model="inputRoom"
+                type="text"
+              />
+            </div>
+            <div>
+              <input placeholder="昵称" v-model="inputName" type="text" />
             </div>
             <div>
               <input placeholder="密码" v-model="inputPass" type="password" />
             </div>
           </template>
-
           <div :disabled="socketLock" class="v-btn" @click="toggleOnline">
             <i class="material-icons">{{ room ? "directions_run" : "send" }}</i
             >{{ room ? "离开房间" : "加入/创建" }}
@@ -38,7 +45,8 @@ export default {
   data() {
     return {
       inputRoom: "",
-      inputPass: ""
+      inputPass: "",
+      inputName: ""
     };
   },
   computed: {
@@ -54,6 +62,9 @@ export default {
         return;
       }
       if (this.verify()) {
+        this.$store.commit("setUser", {
+          name: this.inputName
+        });
         this.$store.commit("lockSocket");
         this.$socket.joinRoom({
           name: this.inputRoom,
@@ -62,10 +73,10 @@ export default {
       }
     },
     verify() {
-      const inputRe = /^[A-Za-z]{1,10}$/;
-      if (!inputRe.test(this.inputRoom)) {
+      const roomRe = /^[A-Za-z]{1,10}$/;
+      if (!roomRe.test(this.inputRoom)) {
         this.$snakbar({
-          msg: "请输入合法房间名！" + inputRe,
+          msg: "请输入合法房间名！" + roomRe,
           type: "warn"
         });
         return false;
@@ -78,7 +89,7 @@ export default {
         });
         return false;
       }
-      return inputRe.test(this.inputRoom) && passRe.test(this.inputPass);
+      return roomRe.test(this.inputRoom) && passRe.test(this.inputPass);
     }
   }
 };
@@ -98,6 +109,9 @@ export default {
   border: 1px solid #abab;
   padding: 6px 8px;
   margin-bottom: 6px;
+}
+.v-socket-room input[required] {
+  border: 1px solid rgba(255, 8, 0, 0.733);
 }
 .v-btn {
   cursor: pointer;
@@ -131,5 +145,8 @@ export default {
   list-style: none;
   text-align: center;
   padding: 0;
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+  margin: 6px 8px;
 }
 </style>
