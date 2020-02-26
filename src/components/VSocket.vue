@@ -91,10 +91,10 @@ export default {
     encodedRoom() {
       const room = { name: this.inputRoom, password: this.inputPass };
       const base64 = window.btoa(JSON.stringify(room));
-      return window.location.origin + "/" + encodeURIComponent(base64);
+      return window.location.origin + "/?" + encodeURIComponent(base64);
     },
     decodedRoom() {
-      const roomString = window.location.pathname.substring(1);
+      const roomString = window.location.search.substring(1);
       if (roomString.length < 35) return null;
       try {
         const decodeurl = decodeURIComponent(roomString);
