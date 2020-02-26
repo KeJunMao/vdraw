@@ -22,7 +22,10 @@
           </template>
           <div :disabled="socketLock" class="v-btn" @click="toggleOnline">
             <i class="material-icons">{{ room ? "directions_run" : "send" }}</i
-            >{{ room ? "离开房间" : "加入/创建" }}
+            >{{ room ? "离开" : "加入/创建" }}
+          </div>
+          <div v-if="room" @click="copyRoomUrl" class="v-btn">
+            <i class="material-icons">content_copy</i>分享
           </div>
           <div v-if="room">
             <ul class="v-socket-users">
@@ -52,6 +55,14 @@ export default {
   computed: {
     ...mapState(["room", "socketLock"])
   },
+  mounted() {
+    const room = this.decodedRoom();
+    if (room) {
+      this.inputRoom = room.name;
+      this.inputPass = room.password;
+      this.toggleOnline();
+    }
+  },
   methods: {
     toggleOnline() {
       if (this.socketLock) return;
@@ -70,6 +81,33 @@ export default {
           name: this.inputRoom,
           password: this.inputPass
         });
+      }
+    },
+    copyRoomUrl() {
+      this.$copyText(this.encodedRoom()).then(() => {
+        this.$snakbar("复制成功！发送给好友打开链接即可～");
+      });
+    },
+    encodedRoom() {
+      const room = { name: this.inputRoom, password: this.inputPass };
+      const base64 = window.btoa(JSON.stringify(room));
+      return window.location.origin + "/" + encodeURIComponent(base64);
+    },
+    decodedRoom() {
+      const roomString = window.location.pathname.substring(1);
+      if (roomString.length < 35) return null;
+      try {
+        const decodeurl = decodeURIComponent(roomString);
+        const roomData = JSON.parse(window.atob(decodeurl));
+        if (roomData.name) {
+          return roomData;
+        }
+      } catch {
+        this.$snakbar({
+          msg: "无效的分享房间！",
+          type: "error"
+        });
+        return null;
       }
     },
     verify() {
